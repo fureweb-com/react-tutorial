@@ -1,26 +1,110 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import TodoListTemplate from './components/TodoListTemplate'
+import Form from './components/Form'
+import TodoItemList from './components/TodoItemList'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const hasDuplicatedText = (todos, text) => {
+  return todos.some(todo => todo.text === text)
 }
 
-export default App;
+class App extends Component {
+  id = 3 // 이미 0,1,2 가 존재하므로 3으로 설정
+
+  state = {
+    input: '',
+    todos: [
+      { id: 0, text: '리액트 소개 0', checked: false },
+      { id: 1, text: '리액트 소개 1', checked: true },
+      { id: 2, text: '리액트 소개 2', checked: false }
+    ]
+  }
+
+  clearInput = () => {
+    this.setState({ input: '' })
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      input: e.target.value // input 의 다음 바뀔 값
+    });
+  }
+
+  handleCreate = () => {
+    const { input: text, todos } = this.state;
+    if (!text) return
+
+    // 동일한 text가 존재하는지 확인 후 초기화
+    if (hasDuplicatedText(todos, text)) return this.clearInput()
+
+    this.setState({
+      input: '', // 인풋 비우고
+      // concat 을 사용하여 배열에 추가
+      todos: todos.concat({
+        id: this.id++,
+        text,
+        checked: false
+      })
+    });
+  }
+
+  handleKeyPress = (e) => {
+    // 눌려진 키가 Enter 면 handleCreate 호출
+    if(e.key === 'Enter') {
+      this.handleCreate();
+    }
+  }
+
+  handleToggle = (id) => {
+    console.log(id)
+    const { todos } = this.state;
+
+    // 파라미터로 받은 id 를 가지고 몇번째 아이템인지 찾습니다.
+    const index = todos.findIndex(todo => todo.id === id);
+    const selected = todos[index]; // 선택한 객체
+
+    const nextTodos = [...todos]; // 배열을 복사
+
+    // 기존의 값들을 복사하고, checked 값을 덮어쓰기
+    nextTodos[index] = { 
+      ...selected, 
+      checked: !selected.checked
+    };
+
+    this.setState({
+      todos: nextTodos
+    });
+  }
+
+  handleRemove = (id) => {
+    const { todos } = this.state;
+    this.setState({
+      todos: todos.filter(todo => todo.id !== id)
+    });
+  }
+
+  render() {
+    const { input, todos } = this.state;
+    const {
+      handleChange,
+      handleCreate,
+      handleKeyPress,
+      handleToggle,
+      handleRemove
+    } = this;
+
+    return (
+      <TodoListTemplate form={
+        <Form
+          value={input}
+          onKeyPress={handleKeyPress}
+          onChange={handleChange}
+          onCreate={handleCreate}
+        />
+      }>
+        <TodoItemList todos={todos} onToggle={handleToggle} onRemove={handleRemove}/>
+      </TodoListTemplate>
+    )
+  }
+}
+
+export default App
