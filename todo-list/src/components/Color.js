@@ -7,7 +7,6 @@ class Color extends Component {
 
     return (
       <div
-        key={color.name}
         className={`color ${color.name} ${color.selected ? 'active' : ''}`}
         style={{backgroundColor: color.hex}}
         onClick={() => onColorChange(color.name)}

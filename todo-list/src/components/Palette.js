@@ -10,7 +10,7 @@ class Palette extends Component {
   render() {
     const { colors, onColorChange } = this.props
 
-    const palettes = colors.map(color => <Color color={color} onColorChange={onColorChange}/>)
+    const palettes = colors.map((color) => <Color color={color} key={color.name} onColorChange={onColorChange}/>)
 
     return (
       <div className="palette">
