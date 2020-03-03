@@ -6,19 +6,3 @@
   display: flex;
   justify-content: center;
 }
-.palette-wrapper .palette .color {
-  width: 2rem;
-  height: 2rem;
-  opacity: 0.5;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.palette-wrapper .palette .color:not(:first-child) {
-  margin-left: 1rem;
-}
-.palette-wrapper .palette .color:hover {
-  opacity: 0.75;
-}
-.palette-wrapper .palette .color.active {
-  opacity: 1;
-}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Color from './Color'
 import './Palette.css'
 
 class Palette extends Component {
@@ -9,14 +10,8 @@ class Palette extends Component {
   render() {
     const { colors, onColorChange } = this.props
 
-    const palettes = colors.map(color => (
-      <div
-        key={color.name}
-        className={`color ${color.name} ${color.selected ? 'active' : ''}`}
-        style={{backgroundColor: color.hex}}
-        onClick={() => onColorChange(color.name)}>
-      </div>
-    ))
+    const palettes = colors.map(color => <Color color={color} onColorChange={onColorChange}/>)
+
     return (
       <div className="palette">
         {palettes}

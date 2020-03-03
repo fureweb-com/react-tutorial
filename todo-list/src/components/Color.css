@@ -1,0 +1,16 @@
+.color {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0.5;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.color:not(:first-child) {
+  margin-left: 1rem;
+}
+.color:hover {
+  opacity: 0.75;
+}
+.color.active {
+  opacity: 1;
+}
