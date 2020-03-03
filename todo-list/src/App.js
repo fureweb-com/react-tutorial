@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TodoListTemplate from './components/TodoListTemplate'
 import Form from './components/Form'
 import TodoItemList from './components/TodoItemList'
+import Palette from './components/Palette'
 
 const hasDuplicatedText = (todos, text) => {
   return todos.some(todo => todo.text === text)
@@ -12,10 +13,16 @@ class App extends Component {
 
   state = {
     input: '',
+    colors: [
+      { name: 'black', hex: '#343a40', selected: true },
+      { name: 'red', hex: '#f03e3e', selected: false },
+      { name: 'green', hex: '#12b886', selected: false },
+      { name: 'blue', hex: '#228ae6', selected: false },
+    ],
     todos: [
-      { id: 0, text: '리액트 소개 0', checked: false },
-      { id: 1, text: '리액트 소개 1', checked: true },
-      { id: 2, text: '리액트 소개 2', checked: false }
+      { id: 0, text: 'Hello react!', checked: true },
+      { id: 1, text: 'https://fureweb-com.github.io', checked: false },
+      { id: 2, text: '리액트 처음 해본 날!', checked: false }
     ]
   }
 
@@ -55,7 +62,6 @@ class App extends Component {
   }
 
   handleToggle = (id) => {
-    console.log(id)
     const { todos } = this.state;
 
     // 파라미터로 받은 id 를 가지고 몇번째 아이템인지 찾습니다.
@@ -82,18 +88,25 @@ class App extends Component {
     });
   }
 
+  handleColorChange = (name) => {
+    // 모두 false로 만든 뒤 조건에 맞는 색상만 selected로 추가
+    const colors = this.state.colors.map(color => Object.assign(color, { selected: false }, color.name === name ? { selected: true } : {}))
+    this.setState({ colors })
+  }
+
   render() {
-    const { input, todos } = this.state;
+    const { input, todos, colors } = this.state;
     const {
       handleChange,
       handleCreate,
       handleKeyPress,
       handleToggle,
-      handleRemove
+      handleRemove,
+      handleColorChange
     } = this;
 
     return (
-      <TodoListTemplate form={
+      <TodoListTemplate palette={<Palette colors={colors} onColorChange={handleColorChange}/>} form={
         <Form
           value={input}
           onKeyPress={handleKeyPress}
@@ -101,7 +114,7 @@ class App extends Component {
           onCreate={handleCreate}
         />
       }>
-        <TodoItemList todos={todos} onToggle={handleToggle} onRemove={handleRemove}/>
+        <TodoItemList todos={todos} colors={colors} onToggle={handleToggle} onRemove={handleRemove}/>
       </TodoListTemplate>
     )
   }

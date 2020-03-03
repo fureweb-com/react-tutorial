@@ -36,7 +36,7 @@
 
 .checked {
   text-decoration: line-through;
-  color: #adb5bd;
+  opacity: 0.2;
 }
 
 .check-mark {
